@@ -54,3 +54,20 @@ central_tendency <- data.frame(
 
 # Print the measures of central tendency
 print(central_tendency)
+
+# Calculate measures of distribution
+ranges <- apply(wine_data, 2, function(x) diff(range(x, na.rm = TRUE)))
+variances <- apply(wine_data, 2, var, na.rm = TRUE)
+standard_deviations <- apply(wine_data, 2, sd, na.rm = TRUE)
+
+# Create a data frame to display the measures
+distribution_measures <- data.frame(
+  Variable = names(wine_data),
+  Range = ranges,
+  Variance = variances,
+  Standard_Deviation = standard_deviations
+)
+
+# Print the measures of distribution
+print(distribution_measures)
+
