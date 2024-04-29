@@ -21,5 +21,14 @@ str(wine_data)
 # View the first few rows of the dataset
 head(wine_data)
 
+# Remove the last column
+wine_data <- wine_data[, -ncol(wine_data)]
+
 # Open the dataset in a viewer window
 View(wine_data)
+
+# Calculate measures of frequency
+summary_stats <- summary(wine_data)
+
+# Display the measures of frequency
+print(summary_stats)
