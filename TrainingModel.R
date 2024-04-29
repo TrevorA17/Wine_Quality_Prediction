@@ -83,3 +83,24 @@ model <- train(quality ~ ., data = wine_data, method = "lm", trControl = train_c
 
 # Display the model performance
 print(model)
+
+# Load the required libraries
+library(caret)
+library(randomForest)
+
+# Set seed for reproducibility
+set.seed(123)
+
+# Define the control parameters for cross-validation
+train_control <- trainControl(method = "cv", number = 10)
+
+# Model training - Linear Regression
+linear_model <- train(quality ~ ., data = wine_data, method = "lm", trControl = train_control)
+
+# Model training - Random Forest
+rf_model <- train(quality ~ ., data = wine_data, method = "rf", trControl = train_control)
+
+# Display model performance
+print(linear_model)
+print(rf_model)
+
