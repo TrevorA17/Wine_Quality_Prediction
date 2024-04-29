@@ -26,3 +26,22 @@ wine_data <- wine_data[, -ncol(wine_data)]
 
 # Open the dataset in a viewer window
 View(wine_data)
+
+# Load the required library
+library(caret)
+
+# Set seed for reproducibility
+set.seed(123)
+
+# Split the dataset into training and testing sets (70% training, 30% testing)
+train_indices <- createDataPartition(wine_data$quality, p = 0.7, list = FALSE)
+train_data <- wine_data[train_indices, ]
+test_data <- wine_data[-train_indices, ]
+
+# Summary of the split
+cat("Training set size:", nrow(train_data), "\n")
+cat("Number of variables in training set:", ncol(train_data), "\n")
+cat("\n")
+cat("Testing set size:", nrow(test_data), "\n")
+cat("Number of variables in testing set:", ncol(test_data), "\n")
+
