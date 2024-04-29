@@ -71,3 +71,9 @@ distribution_measures <- data.frame(
 # Print the measures of distribution
 print(distribution_measures)
 
+# Calculate measures of relationship (correlation)
+correlation_matrix <- cor(wine_data, use = "pairwise.complete.obs")
+
+# Print the correlation matrix
+print(correlation_matrix)
+
