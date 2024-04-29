@@ -77,3 +77,25 @@ correlation_matrix <- cor(wine_data, use = "pairwise.complete.obs")
 # Print the correlation matrix
 print(correlation_matrix)
 
+#Load package
+library(ggplot2)
+
+# Plot for 'fixed acidity'
+ggplot(wine_data, aes(x = fixed_acidity)) +
+  geom_histogram(binwidth = 0.5, fill = "skyblue", color = "black") +
+  labs(title = "Histogram of Fixed Acidity", x = "Fixed Acidity", y = "Frequency")
+
+# Plot for 'volatile acidity'
+ggplot(wine_data, aes(x = volatile_acidity)) +
+  geom_histogram(binwidth = 0.05, fill = "lightgreen", color = "black") +
+  labs(title = "Histogram of Volatile Acidity", x = "Volatile Acidity", y = "Frequency")
+
+# Plot for 'citric acid'
+ggplot(wine_data, aes(x = citric_acid)) +
+  geom_histogram(binwidth = 0.05, fill = "lightcoral", color = "black") +
+  labs(title = "Histogram of Citric Acid", x = "Citric Acid", y = "Frequency")
+
+# Plot for 'residual sugar'
+ggplot(wine_data, aes(x = residual_sugar)) +
+  geom_histogram(binwidth = 1, fill = "lightyellow", color = "black") +
+  labs(title = "Histogram of Residual Sugar", x = "Residual Sugar", y = "Frequency")
