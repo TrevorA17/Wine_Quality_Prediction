@@ -99,3 +99,18 @@ ggplot(wine_data, aes(x = citric_acid)) +
 ggplot(wine_data, aes(x = residual_sugar)) +
   geom_histogram(binwidth = 1, fill = "lightyellow", color = "black") +
   labs(title = "Histogram of Residual Sugar", x = "Residual Sugar", y = "Frequency")
+
+# Scatter plot for 'fixed acidity' vs 'volatile acidity'
+ggplot(wine_data, aes(x = fixed_acidity, y = volatile_acidity)) +
+  geom_point(color = "blue") +
+  labs(title = "Scatter Plot: Fixed Acidity vs Volatile Acidity", x = "Fixed Acidity", y = "Volatile Acidity")
+
+# Scatter plot for 'fixed acidity' vs 'citric acid'
+ggplot(wine_data, aes(x = fixed_acidity, y = citric_acid)) +
+  geom_point(color = "green") +
+  labs(title = "Scatter Plot: Fixed Acidity vs Citric Acid", x = "Fixed Acidity", y = "Citric Acid")
+
+# Scatter plot for 'fixed acidity' vs 'residual sugar'
+ggplot(wine_data, aes(x = fixed_acidity, y = residual_sugar)) +
+  geom_point(color = "red") +
+  labs(title = "Scatter Plot: Fixed Acidity vs Residual Sugar", x = "Fixed Acidity", y = "Residual Sugar")
