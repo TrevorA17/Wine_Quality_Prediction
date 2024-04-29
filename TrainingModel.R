@@ -45,3 +45,25 @@ cat("\n")
 cat("Testing set size:", nrow(test_data), "\n")
 cat("Number of variables in testing set:", ncol(test_data), "\n")
 
+# Set seed for reproducibility
+set.seed(123)
+
+# Number of bootstrap iterations
+num_iterations <- 1000
+
+# Function to calculate the statistic of interest (e.g., mean, median) from a sample
+calculate_statistic <- function(data) {
+  # Example: Calculate the mean of the 'quality' variable
+  return(mean(data$quality))
+}
+
+# Perform bootstrapping
+bootstrap_results <- replicate(num_iterations, {
+  # Sample with replacement
+  boot_sample <- wine_data[sample(nrow(wine_data), replace = TRUE), ]
+  # Calculate the statistic of interest
+  calculate_statistic(boot_sample)
+})
+
+# Summary of bootstrapped results
+summary(bootstrap_results)
