@@ -104,3 +104,12 @@ rf_model <- train(quality ~ ., data = wine_data, method = "rf", trControl = trai
 print(linear_model)
 print(rf_model)
 
+# Load the required library
+library(caret)
+
+# Compare model performance using resamples
+model_comparison <- resamples(list(LinearRegression = linear_model, RandomForest = rf_model))
+
+# Summarize the results
+summary(model_comparison)
+
