@@ -67,3 +67,19 @@ bootstrap_results <- replicate(num_iterations, {
 
 # Summary of bootstrapped results
 summary(bootstrap_results)
+
+# Load the required library
+library(caret)
+
+# Define the number of folds
+num_folds <- 10  # You can adjust this value based on your preference
+
+# Define the control parameters for cross-validation
+train_control <- trainControl(method = "cv", number = num_folds)
+
+# Define the model training
+# Example: Linear regression using the 'lm' function
+model <- train(quality ~ ., data = wine_data, method = "lm", trControl = train_control)
+
+# Display the model performance
+print(model)
