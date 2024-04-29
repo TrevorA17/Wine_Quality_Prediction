@@ -1,2 +1,2 @@
 # Wine Quality Prediction
-Predicting wine quality using regression techniques like linear regression or random forests.
+I've developed a machine learning model to predict wine quality based on a variety of chemical properties. The model is accessible through a RESTful API created using the Plumber package in R. Users can input wine characteristics such as fixed acidity, volatile acidity, and alcohol content, and receive predictions on the quality of the wine. The prediction model, powered by a Random Forest algorithm, was trained on a dataset of wine samples with corresponding quality ratings. With this API, you can easily integrate wine quality predictions into your applications or workflows.
