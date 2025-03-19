@@ -1,0 +1,353 @@
+---
+title: "Wine Quality Prediction"
+author: "Trevor Okinda"
+date: "2024"
+output:
+  github_document: 
+    toc: yes
+    toc_depth: 4
+    fig_width: 6
+    fig_height: 4
+    df_print: default
+editor_options:
+  chunk_output_type: console
+---
+
+# Student Details
+
+|                                              |     |
+|----------------------------------------------|-----|
+| **Student ID Number**                        | 134780 |
+| **Student Name**                             | Trevor Okinda |
+| **BBIT 4.2 Group**                           | C |
+| **Project Name**                             | Wine Quality Prediction |
+
+# Setup Chunk
+
+**Note:** the following KnitR options have been set as the global defaults: <BR> `knitr::opts_chunk$set(echo = TRUE, warning = FALSE, eval = TRUE, collapse = FALSE, tidy = TRUE)`.
+
+More KnitR options are documented here <https://bookdown.org/yihui/rmarkdown-cookbook/chunk-options.html> and here <https://yihui.org/knitr/options/>.
+
+```{r setup, include=FALSE}
+library(formatR)
+knitr::opts_chunk$set(
+  warning = FALSE,
+  collapse = FALSE
+)
+```
+
+# Understanding the Dataset (Exploratory Data Analysis (EDA))
+
+## Loading the Dataset
+
+### Source: 
+
+The dataset that was used can be downloaded here: *\<https://www.kaggle.com/datasets/yasserh/wine-quality-dataset\>*
+
+### Reference:
+
+*\<Kaggle. (n.d.). Wine Quality Dataset. Retrieved from https://www.kaggle.com/datasets/yasserh/wine-quality-dataset\>\
+
+Refer to the APA 7th edition manual for rules on how to cite datasets: <https://apastyle.apa.org/style-grammar-guidelines/references/examples/data-set-references>*
+
+# Exploratory Data Analysis
+## Load dataset
+```{r load dataset}
+# Load the wine quality dataset
+wine_data <- read.csv("WineQT.csv", colClasses = c(
+  fixed_acidity = "numeric",
+  volatile_acidity = "numeric",
+  citric_acid = "numeric",
+  residual_sugar = "numeric",
+  chlorides = "numeric",
+  free_sulfur_dioxide = "numeric",
+  total_sulfur_dioxide = "numeric",
+  density = "numeric",
+  pH = "numeric",
+  sulphates = "numeric",
+  alcohol = "numeric",
+  quality = "numeric",
+  Id = "character"
+), header = TRUE)
+
+# Display the structure of the dataset
+str(wine_data)
+
+# View the first few rows of the dataset
+head(wine_data)
+
+# Remove the last column
+wine_data <- wine_data[, -ncol(wine_data)]
+
+# Open the dataset in a viewer window
+View(wine_data)
+
+```
+
+## Measures of frequency
+```{r}
+# Calculate measures of frequency
+summary_stats <- summary(wine_data)
+
+# Display the measures of frequency
+print(summary_stats)
+```
+
+## Measures of Central Tendency
+```{r}
+# Calculate measures of central tendency
+means <- colMeans(wine_data, na.rm = TRUE)
+medians <- apply(wine_data, 2, median, na.rm = TRUE)
+
+# Calculate mode
+getmode <- function(v) {
+  uniqv <- unique(v)
+  uniqv[which.max(tabulate(match(v, uniqv)))]
+}
+modes <- sapply(wine_data, getmode)
+
+# Create a data frame to display the measures
+central_tendency <- data.frame(
+  Variable = names(wine_data),
+  Mean = means,
+  Median = medians,
+  Mode = modes
+)
+
+# Print the measures of central tendency
+print(central_tendency)
+```
+
+## Measures of Distribution
+```{r}
+# Calculate measures of distribution
+ranges <- apply(wine_data, 2, function(x) diff(range(x, na.rm = TRUE)))
+variances <- apply(wine_data, 2, var, na.rm = TRUE)
+standard_deviations <- apply(wine_data, 2, sd, na.rm = TRUE)
+
+# Create a data frame to display the measures
+distribution_measures <- data.frame(
+  Variable = names(wine_data),
+  Range = ranges,
+  Variance = variances,
+  Standard_Deviation = standard_deviations
+)
+
+# Print the measures of distribution
+print(distribution_measures)
+```
+
+## Measures of Relationship
+```{r}
+# Calculate measures of relationship (correlation)
+correlation_matrix <- cor(wine_data, use = "pairwise.complete.obs")
+
+# Print the correlation matrix
+print(correlation_matrix)
+```
+
+## Plots
+```{r}
+#Load package
+library(ggplot2)
+
+# Plot for 'fixed acidity'
+ggplot(wine_data, aes(x = fixed_acidity)) +
+  geom_histogram(binwidth = 0.5, fill = "skyblue", color = "black") +
+  labs(title = "Histogram of Fixed Acidity", x = "Fixed Acidity", y = "Frequency")
+
+# Plot for 'volatile acidity'
+ggplot(wine_data, aes(x = volatile_acidity)) +
+  geom_histogram(binwidth = 0.05, fill = "lightgreen", color = "black") +
+  labs(title = "Histogram of Volatile Acidity", x = "Volatile Acidity", y = "Frequency")
+
+# Plot for 'citric acid'
+ggplot(wine_data, aes(x = citric_acid)) +
+  geom_histogram(binwidth = 0.05, fill = "lightcoral", color = "black") +
+  labs(title = "Histogram of Citric Acid", x = "Citric Acid", y = "Frequency")
+
+# Plot for 'residual sugar'
+ggplot(wine_data, aes(x = residual_sugar)) +
+  geom_histogram(binwidth = 1, fill = "lightyellow", color = "black") +
+  labs(title = "Histogram of Residual Sugar", x = "Residual Sugar", y = "Frequency")
+
+# Scatter plot for 'fixed acidity' vs 'volatile acidity'
+ggplot(wine_data, aes(x = fixed_acidity, y = volatile_acidity)) +
+  geom_point(color = "blue") +
+  labs(title = "Scatter Plot: Fixed Acidity vs Volatile Acidity", x = "Fixed Acidity", y = "Volatile Acidity")
+
+# Scatter plot for 'fixed acidity' vs 'citric acid'
+ggplot(wine_data, aes(x = fixed_acidity, y = citric_acid)) +
+  geom_point(color = "green") +
+  labs(title = "Scatter Plot: Fixed Acidity vs Citric Acid", x = "Fixed Acidity", y = "Citric Acid")
+
+# Scatter plot for 'fixed acidity' vs 'residual sugar'
+ggplot(wine_data, aes(x = fixed_acidity, y = residual_sugar)) +
+  geom_point(color = "red") +
+  labs(title = "Scatter Plot: Fixed Acidity vs Residual Sugar", x = "Fixed Acidity", y = "Residual Sugar")
+
+```
+
+# Preprocessing and Data Transformation
+## Missing values
+```{r}
+# Check for missing values
+missing_values <- anyNA(wine_data)
+
+# Display result
+if (missing_values) {
+  print("The dataset contains missing values.")
+} else {
+  print("The dataset does not contain missing values.")
+}
+```
+
+## Transformation
+```{r}
+# Select only numeric variables for transformation
+numeric_vars <- wine_data[, sapply(wine_data, is.numeric)]
+
+# Perform standardization (z-score normalization) on numeric variables
+standardized_data <- scale(numeric_vars)
+
+# Convert the standardized data back to a data frame
+standardized_df <- as.data.frame(standardized_data)
+
+# Replace the numeric variables in the original dataset with the standardized ones
+wine_data[, sapply(wine_data, is.numeric)] <- standardized_df
+
+# View the transformed dataset
+head(wine_data)
+```
+
+# Training Model
+## Data splitting
+```{r}
+# Load the required library
+library(caret)
+
+# Set seed for reproducibility
+set.seed(123)
+
+# Split the dataset into training and testing sets (70% training, 30% testing)
+train_indices <- createDataPartition(wine_data$quality, p = 0.7, list = FALSE)
+train_data <- wine_data[train_indices, ]
+test_data <- wine_data[-train_indices, ]
+
+# Summary of the split
+cat("Training set size:", nrow(train_data), "\n")
+cat("Number of variables in training set:", ncol(train_data), "\n")
+cat("\n")
+cat("Testing set size:", nrow(test_data), "\n")
+cat("Number of variables in testing set:", ncol(test_data), "\n")
+```
+
+## Bootstrapping
+```{r}
+# Set seed for reproducibility
+set.seed(123)
+
+# Number of bootstrap iterations
+num_iterations <- 1000
+
+# Function to calculate the statistic of interest (e.g., mean, median) from a sample
+calculate_statistic <- function(data) {
+  # Example: Calculate the mean of the 'quality' variable
+  return(mean(data$quality))
+}
+
+# Perform bootstrapping
+bootstrap_results <- replicate(num_iterations, {
+  # Sample with replacement
+  boot_sample <- wine_data[sample(nrow(wine_data), replace = TRUE), ]
+  # Calculate the statistic of interest
+  calculate_statistic(boot_sample)
+})
+
+# Summary of bootstrapped results
+summary(bootstrap_results)
+```
+
+## Cross-validation
+```{r}
+# Load the required library
+library(caret)
+
+# Define the number of folds
+num_folds <- 10  # You can adjust this value based on your preference
+
+# Define the control parameters for cross-validation
+train_control <- trainControl(method = "cv", number = num_folds)
+
+# Define the model training
+# Example: Linear regression using the 'lm' function
+model <- train(quality ~ ., data = wine_data, method = "lm", trControl = train_control)
+
+# Display the model performance
+print(model)
+```
+
+## Training different models
+```{r}
+# Load the required libraries
+library(caret)
+library(randomForest)
+
+# Set seed for reproducibility
+set.seed(123)
+
+# Define the control parameters for cross-validation
+train_control <- trainControl(method = "cv", number = 10)
+
+# Model training - Linear Regression
+linear_model <- train(quality ~ ., data = wine_data, method = "lm", trControl = train_control)
+
+# Model training - Random Forest
+rf_model <- train(quality ~ ., data = wine_data, method = "rf", trControl = train_control)
+
+# Display model performance
+print(linear_model)
+print(rf_model)
+```
+
+## Model performance comparison
+```{r}
+# Compare model performance using resamples
+model_comparison <- resamples(list(LinearRegression = linear_model, RandomForest = rf_model))
+
+# Summarize the results
+summary(model_comparison)
+```
+
+## Saving Model
+```{r}
+# Saving the best Random Forest model
+saveRDS(rf_model$finalModel, "./models/rf_model.rds")
+
+# Load the saved model
+loaded_rf_model <- readRDS("./models/rf_model.rds")
+
+# Prepare new data for prediction
+new_data <- data.frame(
+  fixed_acidity = 7.4,
+  volatile_acidity = 0.7,
+  citric_acid = 0.0,
+  residual_sugar = 1.9,
+  chlorides = 0.076,
+  free_sulfur_dioxide = 11,
+  total_sulfur_dioxide = 34,
+  density = 0.9978,
+  pH = 3.51,
+  sulphates = 0.56,
+  alcohol = 9.4
+)
+
+# Use the loaded model to make predictions
+predictions_loaded_model <- predict(loaded_rf_model, newdata = new_data)
+
+# Print predictions
+print(predictions_loaded_model)
+
+```
+
+
